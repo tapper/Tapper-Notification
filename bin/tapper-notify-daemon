@@ -1,0 +1,16 @@
+#! perl
+
+use strict;
+use warnings;
+
+# TODO: redirect STDERR/STDOUT
+
+use Tapper::Notification::Daemon;
+use App::Daemon 'daemonize';
+$App::Daemon::as_user = "root";
+$App::Daemon::logfile = "/tmp/tapper-notification-daemon.log";
+$App::Daemon::pidfile = "/tmp/tapper-notification-daemon.pid";
+daemonize();
+my $daemon = Tapper::Notification->new;
+$daemon->loop;
+

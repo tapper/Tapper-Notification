@@ -7,9 +7,13 @@ use strict;
 use Moose;
 use Tapper::Model 'model';
 use Tapper::Config;
-use YAML::Syck 'Load';
-use Log::Log4perl;
 use Try::Tiny;
+use Hash::Merge::Simple 'merge';
+use Language::Expr;
+
+use Data::DPath 'dpath';
+use Tapper::Reports::DPath;
+
 
 extends 'Tapper::Base';
 
@@ -70,6 +74,47 @@ sub get_subscriptions
 }
 
 
+=head2 get_testrun_data
+
+Get all neccessary testrun data related to given testrun id.
+
+@param int - testrun id
+
+@return hash ref - testrun data
+
+=cut
+
+sub get_testrun_data
+{
+        my ($self, $testrun_id) = @_;
+        my $testrun      = model('TestrunDB')->resultset('Testrun')->find({id => $testrun_id},{ result_class => 'DBIx::Class::ResultClass::HashRefInflator' });
+        my $job          = model('TestrunDB')->resultset('TestrunScheduling')->find({testrun_id => $testrun_id},{ result_class => 'DBIx::Class::ResultClass::HashRefInflator' });
+        my $user         = model('TestrunDB')->resultset('User')->find($testrun->{owner_user_id});
+        $testrun         = merge($job, $testrun);
+        $testrun->{user} = $user ? $user->login : 'unknown';
+        return $testrun;
+}
+
+=head2 get_report_data
+
+Get all neccessary report data related to given report id.
+
+@param int - report id
+
+@return hash ref - report data
+
+=cut
+
+sub get_report_data
+{
+        my ($self, $report_id) = @_;
+        my $report = model('ReportsDB')->resultset('Report')->find($report_id);
+        my $report_hash = Tapper::Reports::DPath::_as_data($report);
+        return $report_hash;
+}
+
+
+
 =head2 matches
 
 Check whether the given notification condition matches on the given
@@ -85,7 +130,34 @@ event, i.e. whether we need to notify the user.
 sub matches
 {
         my ($self, $condition, $event) = @_;
-        return 1;
+        our ($testrun, $all_testruns, $testrun_reportgroup, $report, $all_reports);
+        given($event->type){
+                when ('testrun_finished') {
+                        $testrun             = $self->get_testrun_data($event->message->{testrun_id});
+                        $all_testruns        = model('TestrunDB')->resultset('Testrun');
+                        $testrun_reportgroup = model('ReportsDB')->resultset('ReportgroupTestrun')->search({testrun_id => $event->message->{testrun_id}});
+                        $all_reports         = model('ReportsDB')->resultset('Report');
+                }
+                when ('report_received')  {
+                        $all_testruns = model('TestrunDB')->resultset('Testrun');
+                        $report       = $self->get_report_data($event->message->{report_id});
+                        $all_reports  = model('ReportsDB')->resultset('Report');
+                };
+                default { return };
+        }
+        *{Tapper::Notification::testrun} = sub { return ( @_ ? $testrun->{$_[0]} : $testrun ) if $testrun };
+        *{Tapper::Notification::report}  = sub { return ( @_ ? $report->{$_[0]}  : $report  ) if $report  };
+
+        my $le = Language::Expr->new;
+        $le->interpreted(1);
+
+        $le->var('report' => $report, 'testrun' => $testrun);
+        $le->func(testrun     => sub { return ( @_ ? $testrun->{$_[0]} : $testrun ) if $testrun });
+        $le->func(report      => sub { return ( @_ ? $report->{$_[0]}  : $report  ) if $report  });
+        $le->func(deep_search => sub { return dpath($_[1])->match($_[0]) } );
+
+        my $success = $le->eval($condition);
+        return  $success;
 }
 
 =head2 notify_user
@@ -99,13 +171,20 @@ Send notification to user.
 sub notify_user
 {
         my ($self, $subscription) = @_;
-        my $text = $subscription->comment || "Notification is here"; # XXX better wording
+        my $text = $subscription->comment;
+        if (not $text) {
+                $text = "Your notification subscription matched a Tapper event.\n".
+                  "The following subscription was triggered:\n\n".
+                    "Event type: ".$subscription->event.
+                      "\nCondition: ".$subscription->condition."\n";
+        }
+
 
         my $contact      = $subscription->user->contacts->first;
         my $plugin       = ucfirst($contact->protocol);
         my $plugin_class = "Tapper::Notification::Plugin::${plugin}";
         eval "use $plugin_class"; ## no critic
-        
+
         if ($@) {
                 $self->log->error( "Could not load $plugin_class: $@" );
         } else {
@@ -113,14 +192,13 @@ sub notify_user
                         no strict 'refs'; ## no critic
                         $self->log->info("Call ${plugin_class}::notify()");
                         my $cfg = $self->cfg->{notification}{sender}{plugins}{$plugin};
-                        use Data::Dumper;
                         my $obj = ${plugin_class}->new({cfg => $cfg});
                         $obj->notify($contact->address, $text);
                 } catch {
                         $self->log->error("Error occured: $_");
                 }
         }
-        
+
         return;
 }
 
@@ -133,14 +211,13 @@ Run the Notification daemon once.
 sub run
 {
         my ($self) = @_;
-        Log::Log4perl->init($self->cfg->{files}{log4perl_cfg});
 
         my $events = $self->get_events;
         while (my $event = $events->next) {
                 my $subscriptions = $self->get_subscriptions($event->type);
                 while (my $subscription = $subscriptions->next) {
                         if ($self->matches($subscription->condition, $event)) {
-                                        
+
 
                                 $self->notify_user($subscription);
                         }

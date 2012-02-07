@@ -17,7 +17,7 @@ use Log::Log4perl;
 use Tapper::Model 'model';
 
 my $string = "
-log4perl.rootLogger           = DEBUG, root
+log4perl.rootLogger           = FATAL, root
 log4perl.appender.root        = Log::Log4perl::Appender::Screen
 log4perl.appender.root.stderr = 1
 log4perl.appender.root.layout = SimpleLayout";

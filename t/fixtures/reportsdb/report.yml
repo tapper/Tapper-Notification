@@ -5,6 +5,12 @@
   data:
     id: 21
 
+- schema: Report
+  name: full_tap_report
+  data:
+    id: 101
+
+
 - schema: Tap
   name: tap 1
   data:
@@ -56,10 +62,21 @@
   data:
       id: 1
       user_id: 1 # anton
-      persist: ~
+      persist: 1
       event: testrun_finished
-      condition: testrun_id == 23
+      condition: testrun('topic_name') eq 'Software'
       comment: Testrun id 23 finished
+
+- schema: Notification
+  name: subscription
+  data:
+      id: 2
+      user_id: 1 # anton
+      persist: ~
+      event: report_received
+      condition: deep_search(report('results'), '//todo_passed')
+      comment: Report received
+
 
 - schema: User
   name: user_anton
@@ -83,3 +100,1161 @@
       type: testrun_finished
       message: |
         testrun_id: 23
+
+
+
+
+# -----------------------------------------------
+#
+#                real TAP DOM follows
+#
+# -----------------------------------------------
+
+- schema: Tap
+  name: full_tap
+  data:
+    id: 1001
+    report_id: 101
+    tap: |
+      # Tapper-suite-version: 0.020022
+      # Tapper-starttime-test-program: 20120207T083655
+      # Tapper-machine-name: circe
+      # Tapper-suite-name: C-states Check
+      # Tapper-reportgroup-arbitrary:
+      # Tapper-section: tapper-meta-information
+      # Tapper-reportgroup-testrun: 265467
+      ok 1 - tapper-meta-data
+      1..1
+      # Tapper-section: C-state availability
+      ok 1 - C-states information available
+      # available c-states: C0, C1, C2
+      1..8
+      # Tapper-section: sleep test
+      ok 1 - cpu6 c-states
+      # do not match
+      ok 2 - cpu7 c-states
+      # do not match
+      ok 3 - cpu4 c-states
+      # do not match
+      ok 4 - cpu5 c-states
+      # do not match
+      ok 5 - cpu2 c-states
+      # do not match
+      ok 6 - cpu3 c-states
+      # do not match
+      ok 7 - cpu0 c-states
+      # do not match
+      ok 8 - cpu1 c-states
+      # do not match
+      1..8
+      # Tapper-section: offline test
+      ok 1 - cpu6 c-states
+      # do match, this was expected
+      ok 2 - cpu7 c-states
+      # do match, this was expected
+      ok 3 - cpu4 c-states
+      # do match, this was expected
+      ok 4 - cpu5 c-states
+      # do match, this was expected
+      ok 5 - cpu2 c-states
+      # do match, this was expected
+      ok 6 - cpu3 c-states
+      # do match, this was expected
+      ok 7 - cpu0 c-states
+      # do not match
+      ok 8 - cpu1 c-states
+      # do match, this was expected
+    tapdom: |
+      $VAR1 = [
+          {
+            'section' => {
+                           'tapper-meta-information' => {
+                                                          'tap' => bless( {
+                                                                            'parse_errors' => [],
+                                                                            'tests_run' => 1,
+                                                                            'version' => 13,
+                                                                            'exit' => 0,
+                                                                            'start_time' => '1328600495.2058',
+                                                                            'skip_all' => undef,
+                                                                            'lines' => [
+                                                                                         bless( {
+                                                                                                  'is_comment' => 0,
+                                                                                                  'has_skip' => 0,
+                                                                                                  'is_test' => 0,
+                                                                                                  'is_yaml' => 0,
+                                                                                                  'is_plan' => 0,
+                                                                                                  'is_actual_ok' => 0,
+                                                                                                  'is_unknown' => 0,
+                                                                                                  'has_todo' => 0,
+                                                                                                  'is_bailout' => 0,
+                                                                                                  'is_pragma' => 0,
+                                                                                                  'is_version' => 1
+                                                                                                }, 'TAP::DOM::Entry' ),
+                                                                                         bless( {
+                                                                                                  'is_comment' => 0,
+                                                                                                  'has_skip' => 0,
+                                                                                                  'is_test' => 0,
+                                                                                                  'is_yaml' => 0,
+                                                                                                  'is_plan' => 1,
+                                                                                                  '_children' => [
+                                                                                                                   bless( {
+                                                                                                                            'is_comment' => 1,
+                                                                                                                            'has_skip' => 0,
+                                                                                                                            'is_test' => 0,
+                                                                                                                            'is_yaml' => 0,
+                                                                                                                            'is_plan' => 0,
+                                                                                                                            'is_actual_ok' => 0,
+                                                                                                                            'is_unknown' => 0,
+                                                                                                                            'has_todo' => 0,
+                                                                                                                            'is_bailout' => 0,
+                                                                                                                            'is_pragma' => 0,
+                                                                                                                            'is_version' => 0
+                                                                                                                          }, 'TAP::DOM::Entry' ),
+                                                                                                                   bless( {
+                                                                                                                            'is_comment' => 1,
+                                                                                                                            'has_skip' => 0,
+                                                                                                                            'is_test' => 0,
+                                                                                                                            'is_yaml' => 0,
+                                                                                                                            'is_plan' => 0,
+                                                                                                                            'is_actual_ok' => 0,
+                                                                                                                            'is_unknown' => 0,
+                                                                                                                            'has_todo' => 0,
+                                                                                                                            'is_bailout' => 0,
+                                                                                                                            'is_pragma' => 0,
+                                                                                                                            'is_version' => 0
+                                                                                                                          }, 'TAP::DOM::Entry' ),
+                                                                                                                   bless( {
+                                                                                                                            'is_comment' => 1,
+                                                                                                                            'has_skip' => 0,
+                                                                                                                            'is_test' => 0,
+                                                                                                                            'is_yaml' => 0,
+                                                                                                                            'is_plan' => 0,
+                                                                                                                            'is_actual_ok' => 0,
+                                                                                                                            'is_unknown' => 0,
+                                                                                                                            'has_todo' => 0,
+                                                                                                                            'is_bailout' => 0,
+                                                                                                                            'is_pragma' => 0,
+                                                                                                                            'is_version' => 0
+                                                                                                                          }, 'TAP::DOM::Entry' ),
+                                                                                                                   bless( {
+                                                                                                                            'is_comment' => 1,
+                                                                                                                            'has_skip' => 0,
+                                                                                                                            'is_test' => 0,
+                                                                                                                            'is_yaml' => 0,
+                                                                                                                            'is_plan' => 0,
+                                                                                                                            'is_actual_ok' => 0,
+                                                                                                                            'is_unknown' => 0,
+                                                                                                                            'has_todo' => 0,
+                                                                                                                            'is_bailout' => 0,
+                                                                                                                            'is_pragma' => 0,
+                                                                                                                            'is_version' => 0
+                                                                                                                          }, 'TAP::DOM::Entry' ),
+                                                                                                                   bless( {
+                                                                                                                            'is_comment' => 1,
+                                                                                                                            'has_skip' => 0,
+                                                                                                                            'is_test' => 0,
+                                                                                                                            'is_yaml' => 0,
+                                                                                                                            'is_plan' => 0,
+                                                                                                                            'is_actual_ok' => 0,
+                                                                                                                            'is_unknown' => 0,
+                                                                                                                            'has_todo' => 0,
+                                                                                                                            'is_bailout' => 0,
+                                                                                                                            'is_pragma' => 0,
+                                                                                                                            'is_version' => 0
+                                                                                                                          }, 'TAP::DOM::Entry' ),
+                                                                                                                   bless( {
+                                                                                                                            'is_comment' => 1,
+                                                                                                                            'has_skip' => 0,
+                                                                                                                            'is_test' => 0,
+                                                                                                                            'is_yaml' => 0,
+                                                                                                                            'is_plan' => 0,
+                                                                                                                            'is_actual_ok' => 0,
+                                                                                                                            'is_unknown' => 0,
+                                                                                                                            'has_todo' => 0,
+                                                                                                                            'is_bailout' => 0,
+                                                                                                                            'is_pragma' => 0,
+                                                                                                                            'is_version' => 0
+                                                                                                                          }, 'TAP::DOM::Entry' ),
+                                                                                                                   bless( {
+                                                                                                                            'is_comment' => 1,
+                                                                                                                            'has_skip' => 0,
+                                                                                                                            'is_test' => 0,
+                                                                                                                            'is_yaml' => 0,
+                                                                                                                            'is_plan' => 0,
+                                                                                                                            'is_actual_ok' => 0,
+                                                                                                                            'is_unknown' => 0,
+                                                                                                                            'has_todo' => 0,
+                                                                                                                            'is_bailout' => 0,
+                                                                                                                            'is_pragma' => 0,
+                                                                                                                            'is_version' => 0
+                                                                                                                          }, 'TAP::DOM::Entry' )
+                                                                                                                 ],
+                                                                                                  'is_actual_ok' => 0,
+                                                                                                  'is_unknown' => 0,
+                                                                                                  'has_todo' => 0,
+                                                                                                  'is_bailout' => 0,
+                                                                                                  'is_pragma' => 0,
+                                                                                                  'is_version' => 0
+                                                                                                }, 'TAP::DOM::Entry' ),
+                                                                                         bless( {
+                                                                                                  'is_comment' => 0,
+                                                                                                  'is_yaml' => 0,
+                                                                                                  'is_plan' => 0,
+                                                                                                  'number' => '1',
+                                                                                                  'is_unknown' => 0,
+                                                                                                  'is_bailout' => 0,
+                                                                                                  'is_pragma' => 0,
+                                                                                                  'is_unplanned' => 0,
+                                                                                                  'has_skip' => 0,
+                                                                                                  'is_test' => 1,
+                                                                                                  'is_actual_ok' => 0,
+                                                                                                  'description' => '- tapper-meta-data',
+                                                                                                  'is_ok' => 1,
+                                                                                                  'has_todo' => 0,
+                                                                                                  'explanation' => '',
+                                                                                                  'directive' => '',
+                                                                                                  'type' => 'test',
+                                                                                                  'is_version' => 0
+                                                                                                }, 'TAP::DOM::Entry' )
+                                                                                       ],
+                                                                            'is_good_plan' => 1,
+                                                                            'has_problems' => 0,
+                                                                            'end_time' => '1328600495.20677',
+                                                                            'summary' => bless( {
+                                                                                                  'parse_errors' => 0,
+                                                                                                  'status' => 'PASS',
+                                                                                                  'todo_passed' => 0,
+                                                                                                  'all_passed' => 1,
+                                                                                                  'exit' => 0,
+                                                                                                  'has_errors' => 0,
+                                                                                                  'passed' => 1,
+                                                                                                  'total' => 1,
+                                                                                                  'failed' => 0,
+                                                                                                  'elapsed_timestr' => ' 0 wallclock secs ( 0.00 usr +  0.00 sys =  0.00 CPU)',
+                                                                                                  'elapsed' => bless( [
+                                                                                                                        0,
+                                                                                                                        '0',
+                                                                                                                        '0',
+                                                                                                                        0,
+                                                                                                                        0,
+                                                                                                                        0
+                                                                                                                      ], 'Benchmark' ),
+                                                                                                  'skipped' => 0,
+                                                                                                  'has_problems' => 0,
+                                                                                                  'wait' => 0,
+                                                                                                  'todo' => 0
+                                                                                                }, 'TAP::DOM::Summary' ),
+                                                                            'pragmas' => [],
+                                                                            'tapdom_config' => bless( {
+                                                                                                        'ignorelines' => qr/(?-xism:^\#\# )/,
+                                                                                                        'usebitsets' => undef,
+                                                                                                        'ignore' => {
+                                                                                                                      'as_string' => 1,
+                                                                                                                      'raw' => 1
+                                                                                                                    }
+                                                                                                      }, 'TAP::DOM::Config' ),
+                                                                            'plan' => '1..1',
+                                                                            'tests_planned' => 1
+                                                                          }, 'TAP::DOM' ),
+                                                          'meta' => {
+                                                                      'reportgroup-testrun' => '265467',
+                                                                      'reportgroup-arbitrary' => '',
+                                                                      'starttime-test-program' => '20120207T083655',
+                                                                      'section' => 'tapper-meta-information',
+                                                                      'suite-name' => 'C-states Check',
+                                                                      'machine-name' => 'circe',
+                                                                      'suite-version' => '0.020022'
+                                                                    }
+                                                        }
+                         }
+          },
+          {
+            'section' => {
+                           'C-state-availability' => {
+                                                       'tap' => bless( {
+                                                                         'parse_errors' => [],
+                                                                         'tests_run' => 1,
+                                                                         'version' => 13,
+                                                                         'exit' => 0,
+                                                                         'start_time' => '1328600495.20754',
+                                                                         'skip_all' => undef,
+                                                                         'lines' => [
+                                                                                      bless( {
+                                                                                               'is_comment' => 0,
+                                                                                               'has_skip' => 0,
+                                                                                               'is_test' => 0,
+                                                                                               'is_yaml' => 0,
+                                                                                               'is_plan' => 0,
+                                                                                               'is_actual_ok' => 0,
+                                                                                               'is_unknown' => 0,
+                                                                                               'has_todo' => 0,
+                                                                                               'is_bailout' => 0,
+                                                                                               'is_pragma' => 0,
+                                                                                               'is_version' => 1
+                                                                                             }, 'TAP::DOM::Entry' ),
+                                                                                      bless( {
+                                                                                               'is_comment' => 0,
+                                                                                               'has_skip' => 0,
+                                                                                               'is_test' => 0,
+                                                                                               'is_yaml' => 0,
+                                                                                               'is_plan' => 1,
+                                                                                               '_children' => [
+                                                                                                                bless( {
+                                                                                                                         'is_comment' => 1,
+                                                                                                                         'has_skip' => 0,
+                                                                                                                         'is_test' => 0,
+                                                                                                                         'is_yaml' => 0,
+                                                                                                                         'is_plan' => 0,
+                                                                                                                         'is_actual_ok' => 0,
+                                                                                                                         'is_unknown' => 0,
+                                                                                                                         'has_todo' => 0,
+                                                                                                                         'is_bailout' => 0,
+                                                                                                                         'is_pragma' => 0,
+                                                                                                                         'is_version' => 0
+                                                                                                                       }, 'TAP::DOM::Entry' )
+                                                                                                              ],
+                                                                                               'is_actual_ok' => 0,
+                                                                                               'is_unknown' => 0,
+                                                                                               'has_todo' => 0,
+                                                                                               'is_bailout' => 0,
+                                                                                               'is_pragma' => 0,
+                                                                                               'is_version' => 0
+                                                                                             }, 'TAP::DOM::Entry' ),
+                                                                                      bless( {
+                                                                                               'is_comment' => 0,
+                                                                                               'is_yaml' => 0,
+                                                                                               'is_plan' => 0,
+                                                                                               'number' => '1',
+                                                                                               'is_unknown' => 0,
+                                                                                               'is_bailout' => 0,
+                                                                                               'is_pragma' => 0,
+                                                                                               'is_unplanned' => 0,
+                                                                                               'has_skip' => 0,
+                                                                                               'is_test' => 1,
+                                                                                               '_children' => [
+                                                                                                                bless( {
+                                                                                                                         'is_comment' => 1,
+                                                                                                                         'has_skip' => 0,
+                                                                                                                         'is_test' => 0,
+                                                                                                                         'is_yaml' => 0,
+                                                                                                                         'is_plan' => 0,
+                                                                                                                         'is_actual_ok' => 0,
+                                                                                                                         'is_unknown' => 0,
+                                                                                                                         'has_todo' => 0,
+                                                                                                                         'is_bailout' => 0,
+                                                                                                                         'is_pragma' => 0,
+                                                                                                                         'is_version' => 0
+                                                                                                                       }, 'TAP::DOM::Entry' )
+                                                                                                              ],
+                                                                                               'is_actual_ok' => 0,
+                                                                                               'description' => '- C-states information available',
+                                                                                               'is_ok' => 1,
+                                                                                               'has_todo' => 0,
+                                                                                               'explanation' => '',
+                                                                                               'directive' => '',
+                                                                                               'type' => 'test',
+                                                                                               'is_version' => 0
+                                                                                             }, 'TAP::DOM::Entry' )
+                                                                                    ],
+                                                                         'is_good_plan' => 1,
+                                                                         'has_problems' => 0,
+                                                                         'end_time' => '1328600495.20806',
+                                                                         'summary' => bless( {
+                                                                                               'parse_errors' => 0,
+                                                                                               'status' => 'PASS',
+                                                                                               'todo_passed' => 0,
+                                                                                               'all_passed' => 1,
+                                                                                               'exit' => 0,
+                                                                                               'has_errors' => 0,
+                                                                                               'passed' => 1,
+                                                                                               'total' => 1,
+                                                                                               'failed' => 0,
+                                                                                               'elapsed_timestr' => ' 0 wallclock secs ( 0.00 usr +  0.00 sys =  0.00 CPU)',
+                                                                                               'elapsed' => bless( [
+                                                                                                                     0,
+                                                                                                                     '0',
+                                                                                                                     '0',
+                                                                                                                     0,
+                                                                                                                     0,
+                                                                                                                     0
+                                                                                                                   ], 'Benchmark' ),
+                                                                                               'skipped' => 0,
+                                                                                               'has_problems' => 0,
+                                                                                               'wait' => 0,
+                                                                                               'todo' => 0
+                                                                                             }, 'TAP::DOM::Summary' ),
+                                                                         'pragmas' => [],
+                                                                         'tapdom_config' => bless( {
+                                                                                                     'ignorelines' => qr/(?-xism:^\#\# )/,
+                                                                                                     'usebitsets' => undef,
+                                                                                                     'ignore' => {
+                                                                                                                   'as_string' => 1,
+                                                                                                                   'raw' => 1
+                                                                                                                 }
+                                                                                                   }, 'TAP::DOM::Config' ),
+                                                                         'plan' => '1..1',
+                                                                         'tests_planned' => 1
+                                                                       }, 'TAP::DOM' ),
+                                                       'meta' => {
+                                                                   'section' => 'C-state availability'
+                                                                 }
+                                                     }
+                         }
+          },
+          {
+            'section' => {
+                           'sleep-test' => {
+                                             'tap' => bless( {
+                                                               'parse_errors' => [],
+                                                               'tests_run' => 8,
+                                                               'version' => 13,
+                                                               'exit' => 0,
+                                                               'start_time' => '1328600495.20871',
+                                                               'skip_all' => undef,
+                                                               'lines' => [
+                                                                            bless( {
+                                                                                     'is_comment' => 0,
+                                                                                     'has_skip' => 0,
+                                                                                     'is_test' => 0,
+                                                                                     'is_yaml' => 0,
+                                                                                     'is_plan' => 0,
+                                                                                     'is_actual_ok' => 0,
+                                                                                     'is_unknown' => 0,
+                                                                                     'has_todo' => 0,
+                                                                                     'is_bailout' => 0,
+                                                                                     'is_pragma' => 0,
+                                                                                     'is_version' => 1
+                                                                                   }, 'TAP::DOM::Entry' ),
+                                                                            bless( {
+                                                                                     'is_comment' => 0,
+                                                                                     'has_skip' => 0,
+                                                                                     'is_test' => 0,
+                                                                                     'is_yaml' => 0,
+                                                                                     'is_plan' => 1,
+                                                                                     '_children' => [
+                                                                                                      bless( {
+                                                                                                               'is_comment' => 1,
+                                                                                                               'has_skip' => 0,
+                                                                                                               'is_test' => 0,
+                                                                                                               'is_yaml' => 0,
+                                                                                                               'is_plan' => 0,
+                                                                                                               'is_actual_ok' => 0,
+                                                                                                               'is_unknown' => 0,
+                                                                                                               'has_todo' => 0,
+                                                                                                               'is_bailout' => 0,
+                                                                                                               'is_pragma' => 0,
+                                                                                                               'is_version' => 0
+                                                                                                             }, 'TAP::DOM::Entry' )
+                                                                                                    ],
+                                                                                     'is_actual_ok' => 0,
+                                                                                     'is_unknown' => 0,
+                                                                                     'has_todo' => 0,
+                                                                                     'is_bailout' => 0,
+                                                                                     'is_pragma' => 0,
+                                                                                     'is_version' => 0
+                                                                                   }, 'TAP::DOM::Entry' ),
+                                                                            bless( {
+                                                                                     'is_comment' => 0,
+                                                                                     'is_yaml' => 0,
+                                                                                     'is_plan' => 0,
+                                                                                     'number' => '1',
+                                                                                     'is_unknown' => 0,
+                                                                                     'is_bailout' => 0,
+                                                                                     'is_pragma' => 0,
+                                                                                     'is_unplanned' => 0,
+                                                                                     'has_skip' => 0,
+                                                                                     'is_test' => 1,
+                                                                                     '_children' => [
+                                                                                                      bless( {
+                                                                                                               'is_comment' => 1,
+                                                                                                               'has_skip' => 0,
+                                                                                                               'is_test' => 0,
+                                                                                                               'is_yaml' => 0,
+                                                                                                               'is_plan' => 0,
+                                                                                                               'is_actual_ok' => 0,
+                                                                                                               'is_unknown' => 0,
+                                                                                                               'has_todo' => 0,
+                                                                                                               'is_bailout' => 0,
+                                                                                                               'is_pragma' => 0,
+                                                                                                               'is_version' => 0
+                                                                                                             }, 'TAP::DOM::Entry' )
+                                                                                                    ],
+                                                                                     'is_actual_ok' => 0,
+                                                                                     'description' => '- cpu6 c-states',
+                                                                                     'is_ok' => 1,
+                                                                                     'has_todo' => 0,
+                                                                                     'explanation' => '',
+                                                                                     'directive' => '',
+                                                                                     'type' => 'test',
+                                                                                     'is_version' => 0
+                                                                                   }, 'TAP::DOM::Entry' ),
+                                                                            bless( {
+                                                                                     'is_comment' => 0,
+                                                                                     'is_yaml' => 0,
+                                                                                     'is_plan' => 0,
+                                                                                     'number' => '2',
+                                                                                     'is_unknown' => 0,
+                                                                                     'is_bailout' => 0,
+                                                                                     'is_pragma' => 0,
+                                                                                     'is_unplanned' => 0,
+                                                                                     'has_skip' => 0,
+                                                                                     'is_test' => 1,
+                                                                                     '_children' => [
+                                                                                                      bless( {
+                                                                                                               'is_comment' => 1,
+                                                                                                               'has_skip' => 0,
+                                                                                                               'is_test' => 0,
+                                                                                                               'is_yaml' => 0,
+                                                                                                               'is_plan' => 0,
+                                                                                                               'is_actual_ok' => 0,
+                                                                                                               'is_unknown' => 0,
+                                                                                                               'has_todo' => 0,
+                                                                                                               'is_bailout' => 0,
+                                                                                                               'is_pragma' => 0,
+                                                                                                               'is_version' => 0
+                                                                                                             }, 'TAP::DOM::Entry' )
+                                                                                                    ],
+                                                                                     'is_actual_ok' => 0,
+                                                                                     'description' => '- cpu7 c-states',
+                                                                                     'is_ok' => 1,
+                                                                                     'has_todo' => 0,
+                                                                                     'explanation' => '',
+                                                                                     'directive' => '',
+                                                                                     'type' => 'test',
+                                                                                     'is_version' => 0
+                                                                                   }, 'TAP::DOM::Entry' ),
+                                                                            bless( {
+                                                                                     'is_comment' => 0,
+                                                                                     'is_yaml' => 0,
+                                                                                     'is_plan' => 0,
+                                                                                     'number' => '3',
+                                                                                     'is_unknown' => 0,
+                                                                                     'is_bailout' => 0,
+                                                                                     'is_pragma' => 0,
+                                                                                     'is_unplanned' => 0,
+                                                                                     'has_skip' => 0,
+                                                                                     'is_test' => 1,
+                                                                                     '_children' => [
+                                                                                                      bless( {
+                                                                                                               'is_comment' => 1,
+                                                                                                               'has_skip' => 0,
+                                                                                                               'is_test' => 0,
+                                                                                                               'is_yaml' => 0,
+                                                                                                               'is_plan' => 0,
+                                                                                                               'is_actual_ok' => 0,
+                                                                                                               'is_unknown' => 0,
+                                                                                                               'has_todo' => 0,
+                                                                                                               'is_bailout' => 0,
+                                                                                                               'is_pragma' => 0,
+                                                                                                               'is_version' => 0
+                                                                                                             }, 'TAP::DOM::Entry' )
+                                                                                                    ],
+                                                                                     'is_actual_ok' => 0,
+                                                                                     'description' => '- cpu4 c-states',
+                                                                                     'is_ok' => 1,
+                                                                                     'has_todo' => 0,
+                                                                                     'explanation' => '',
+                                                                                     'directive' => '',
+                                                                                     'type' => 'test',
+                                                                                     'is_version' => 0
+                                                                                   }, 'TAP::DOM::Entry' ),
+                                                                            bless( {
+                                                                                     'is_comment' => 0,
+                                                                                     'is_yaml' => 0,
+                                                                                     'is_plan' => 0,
+                                                                                     'number' => '4',
+                                                                                     'is_unknown' => 0,
+                                                                                     'is_bailout' => 0,
+                                                                                     'is_pragma' => 0,
+                                                                                     'is_unplanned' => 0,
+                                                                                     'has_skip' => 0,
+                                                                                     'is_test' => 1,
+                                                                                     '_children' => [
+                                                                                                      bless( {
+                                                                                                               'is_comment' => 1,
+                                                                                                               'has_skip' => 0,
+                                                                                                               'is_test' => 0,
+                                                                                                               'is_yaml' => 0,
+                                                                                                               'is_plan' => 0,
+                                                                                                               'is_actual_ok' => 0,
+                                                                                                               'is_unknown' => 0,
+                                                                                                               'has_todo' => 0,
+                                                                                                               'is_bailout' => 0,
+                                                                                                               'is_pragma' => 0,
+                                                                                                               'is_version' => 0
+                                                                                                             }, 'TAP::DOM::Entry' )
+                                                                                                    ],
+                                                                                     'is_actual_ok' => 0,
+                                                                                     'description' => '- cpu5 c-states',
+                                                                                     'is_ok' => 1,
+                                                                                     'has_todo' => 0,
+                                                                                     'explanation' => '',
+                                                                                     'directive' => '',
+                                                                                     'type' => 'test',
+                                                                                     'is_version' => 0
+                                                                                   }, 'TAP::DOM::Entry' ),
+                                                                            bless( {
+                                                                                     'is_comment' => 0,
+                                                                                     'is_yaml' => 0,
+                                                                                     'is_plan' => 0,
+                                                                                     'number' => '5',
+                                                                                     'is_unknown' => 0,
+                                                                                     'is_bailout' => 0,
+                                                                                     'is_pragma' => 0,
+                                                                                     'is_unplanned' => 0,
+                                                                                     'has_skip' => 0,
+                                                                                     'is_test' => 1,
+                                                                                     '_children' => [
+                                                                                                      bless( {
+                                                                                                               'is_comment' => 1,
+                                                                                                               'has_skip' => 0,
+                                                                                                               'is_test' => 0,
+                                                                                                               'is_yaml' => 0,
+                                                                                                               'is_plan' => 0,
+                                                                                                               'is_actual_ok' => 0,
+                                                                                                               'is_unknown' => 0,
+                                                                                                               'has_todo' => 0,
+                                                                                                               'is_bailout' => 0,
+                                                                                                               'is_pragma' => 0,
+                                                                                                               'is_version' => 0
+                                                                                                             }, 'TAP::DOM::Entry' )
+                                                                                                    ],
+                                                                                     'is_actual_ok' => 0,
+                                                                                     'description' => '- cpu2 c-states',
+                                                                                     'is_ok' => 1,
+                                                                                     'has_todo' => 0,
+                                                                                     'explanation' => '',
+                                                                                     'directive' => '',
+                                                                                     'type' => 'test',
+                                                                                     'is_version' => 0
+                                                                                   }, 'TAP::DOM::Entry' ),
+                                                                            bless( {
+                                                                                     'is_comment' => 0,
+                                                                                     'is_yaml' => 0,
+                                                                                     'is_plan' => 0,
+                                                                                     'number' => '6',
+                                                                                     'is_unknown' => 0,
+                                                                                     'is_bailout' => 0,
+                                                                                     'is_pragma' => 0,
+                                                                                     'is_unplanned' => 0,
+                                                                                     'has_skip' => 0,
+                                                                                     'is_test' => 1,
+                                                                                     '_children' => [
+                                                                                                      bless( {
+                                                                                                               'is_comment' => 1,
+                                                                                                               'has_skip' => 0,
+                                                                                                               'is_test' => 0,
+                                                                                                               'is_yaml' => 0,
+                                                                                                               'is_plan' => 0,
+                                                                                                               'is_actual_ok' => 0,
+                                                                                                               'is_unknown' => 0,
+                                                                                                               'has_todo' => 0,
+                                                                                                               'is_bailout' => 0,
+                                                                                                               'is_pragma' => 0,
+                                                                                                               'is_version' => 0
+                                                                                                             }, 'TAP::DOM::Entry' )
+                                                                                                    ],
+                                                                                     'is_actual_ok' => 0,
+                                                                                     'description' => '- cpu3 c-states',
+                                                                                     'is_ok' => 1,
+                                                                                     'has_todo' => 0,
+                                                                                     'explanation' => '',
+                                                                                     'directive' => '',
+                                                                                     'type' => 'test',
+                                                                                     'is_version' => 0
+                                                                                   }, 'TAP::DOM::Entry' ),
+                                                                            bless( {
+                                                                                     'is_comment' => 0,
+                                                                                     'is_yaml' => 0,
+                                                                                     'is_plan' => 0,
+                                                                                     'number' => '7',
+                                                                                     'is_unknown' => 0,
+                                                                                     'is_bailout' => 0,
+                                                                                     'is_pragma' => 0,
+                                                                                     'is_unplanned' => 0,
+                                                                                     'has_skip' => 0,
+                                                                                     'is_test' => 1,
+                                                                                     '_children' => [
+                                                                                                      bless( {
+                                                                                                               'is_comment' => 1,
+                                                                                                               'has_skip' => 0,
+                                                                                                               'is_test' => 0,
+                                                                                                               'is_yaml' => 0,
+                                                                                                               'is_plan' => 0,
+                                                                                                               'is_actual_ok' => 0,
+                                                                                                               'is_unknown' => 0,
+                                                                                                               'has_todo' => 0,
+                                                                                                               'is_bailout' => 0,
+                                                                                                               'is_pragma' => 0,
+                                                                                                               'is_version' => 0
+                                                                                                             }, 'TAP::DOM::Entry' )
+                                                                                                    ],
+                                                                                     'is_actual_ok' => 0,
+                                                                                     'description' => '- cpu0 c-states',
+                                                                                     'is_ok' => 1,
+                                                                                     'has_todo' => 0,
+                                                                                     'explanation' => '',
+                                                                                     'directive' => '',
+                                                                                     'type' => 'test',
+                                                                                     'is_version' => 0
+                                                                                   }, 'TAP::DOM::Entry' ),
+                                                                            bless( {
+                                                                                     'is_comment' => 0,
+                                                                                     'is_yaml' => 0,
+                                                                                     'is_plan' => 0,
+                                                                                     'number' => '8',
+                                                                                     'is_unknown' => 0,
+                                                                                     'is_bailout' => 0,
+                                                                                     'is_pragma' => 0,
+                                                                                     'is_unplanned' => 0,
+                                                                                     'has_skip' => 0,
+                                                                                     'is_test' => 1,
+                                                                                     '_children' => [
+                                                                                                      bless( {
+                                                                                                               'is_comment' => 1,
+                                                                                                               'has_skip' => 0,
+                                                                                                               'is_test' => 0,
+                                                                                                               'is_yaml' => 0,
+                                                                                                               'is_plan' => 0,
+                                                                                                               'is_actual_ok' => 0,
+                                                                                                               'is_unknown' => 0,
+                                                                                                               'has_todo' => 0,
+                                                                                                               'is_bailout' => 0,
+                                                                                                               'is_pragma' => 0,
+                                                                                                               'is_version' => 0
+                                                                                                             }, 'TAP::DOM::Entry' )
+                                                                                                    ],
+                                                                                     'is_actual_ok' => 0,
+                                                                                     'description' => '- cpu1 c-states',
+                                                                                     'is_ok' => 1,
+                                                                                     'has_todo' => 0,
+                                                                                     'explanation' => '',
+                                                                                     'directive' => '',
+                                                                                     'type' => 'test',
+                                                                                     'is_version' => 0
+                                                                                   }, 'TAP::DOM::Entry' )
+                                                                          ],
+                                                               'is_good_plan' => 1,
+                                                               'has_problems' => 0,
+                                                               'end_time' => '1328600495.2106',
+                                                               'summary' => bless( {
+                                                                                     'parse_errors' => 0,
+                                                                                     'status' => 'PASS',
+                                                                                     'todo_passed' => 0,
+                                                                                     'all_passed' => 1,
+                                                                                     'exit' => 0,
+                                                                                     'has_errors' => 0,
+                                                                                     'passed' => 8,
+                                                                                     'total' => 8,
+                                                                                     'failed' => 0,
+                                                                                     'elapsed_timestr' => ' 0 wallclock secs ( 0.00 usr +  0.00 sys =  0.00 CPU)',
+                                                                                     'elapsed' => bless( [
+                                                                                                           0,
+                                                                                                           '0',
+                                                                                                           '0',
+                                                                                                           0,
+                                                                                                           0,
+                                                                                                           0
+                                                                                                         ], 'Benchmark' ),
+                                                                                     'skipped' => 0,
+                                                                                     'has_problems' => 0,
+                                                                                     'wait' => 0,
+                                                                                     'todo' => 0
+                                                                                   }, 'TAP::DOM::Summary' ),
+                                                               'pragmas' => [],
+                                                               'tapdom_config' => bless( {
+                                                                                           'ignorelines' => qr/(?-xism:^\#\# )/,
+                                                                                           'usebitsets' => undef,
+                                                                                           'ignore' => {
+                                                                                                         'as_string' => 1,
+                                                                                                         'raw' => 1
+                                                                                                       }
+                                                                                         }, 'TAP::DOM::Config' ),
+                                                               'plan' => '1..8',
+                                                               'tests_planned' => 8
+                                                             }, 'TAP::DOM' ),
+                                             'meta' => {
+                                                         'section' => 'sleep test'
+                                                       }
+                                           }
+                         }
+          },
+          {
+            'section' => {
+                           'offline-test' => {
+                                               'tap' => bless( {
+                                                                 'parse_errors' => [],
+                                                                 'tests_run' => 8,
+                                                                 'version' => 13,
+                                                                 'exit' => 0,
+                                                                 'start_time' => '1328600495.21127',
+                                                                 'skip_all' => undef,
+                                                                 'lines' => [
+                                                                              bless( {
+                                                                                       'is_comment' => 0,
+                                                                                       'has_skip' => 0,
+                                                                                       'is_test' => 0,
+                                                                                       'is_yaml' => 0,
+                                                                                       'is_plan' => 0,
+                                                                                       'is_actual_ok' => 0,
+                                                                                       'is_unknown' => 0,
+                                                                                       'has_todo' => 0,
+                                                                                       'is_bailout' => 0,
+                                                                                       'is_pragma' => 0,
+                                                                                       'is_version' => 1
+                                                                                     }, 'TAP::DOM::Entry' ),
+                                                                              bless( {
+                                                                                       'is_comment' => 0,
+                                                                                       'has_skip' => 0,
+                                                                                       'is_test' => 0,
+                                                                                       'is_yaml' => 0,
+                                                                                       'is_plan' => 1,
+                                                                                       '_children' => [
+                                                                                                        bless( {
+                                                                                                                 'is_comment' => 1,
+                                                                                                                 'has_skip' => 0,
+                                                                                                                 'is_test' => 0,
+                                                                                                                 'is_yaml' => 0,
+                                                                                                                 'is_plan' => 0,
+                                                                                                                 'is_actual_ok' => 0,
+                                                                                                                 'is_unknown' => 0,
+                                                                                                                 'has_todo' => 0,
+                                                                                                                 'is_bailout' => 0,
+                                                                                                                 'is_pragma' => 0,
+                                                                                                                 'is_version' => 0
+                                                                                                               }, 'TAP::DOM::Entry' )
+                                                                                                      ],
+                                                                                       'is_actual_ok' => 0,
+                                                                                       'is_unknown' => 0,
+                                                                                       'has_todo' => 0,
+                                                                                       'is_bailout' => 0,
+                                                                                       'is_pragma' => 0,
+                                                                                       'is_version' => 0
+                                                                                     }, 'TAP::DOM::Entry' ),
+                                                                              bless( {
+                                                                                       'is_comment' => 0,
+                                                                                       'is_yaml' => 0,
+                                                                                       'is_plan' => 0,
+                                                                                       'number' => '1',
+                                                                                       'is_unknown' => 0,
+                                                                                       'is_bailout' => 0,
+                                                                                       'is_pragma' => 0,
+                                                                                       'is_unplanned' => 0,
+                                                                                       'has_skip' => 0,
+                                                                                       'is_test' => 1,
+                                                                                       '_children' => [
+                                                                                                        bless( {
+                                                                                                                 'is_comment' => 1,
+                                                                                                                 'has_skip' => 0,
+                                                                                                                 'is_test' => 0,
+                                                                                                                 'is_yaml' => 0,
+                                                                                                                 'is_plan' => 0,
+                                                                                                                 'is_actual_ok' => 0,
+                                                                                                                 'is_unknown' => 0,
+                                                                                                                 'has_todo' => 0,
+                                                                                                                 'is_bailout' => 0,
+                                                                                                                 'is_pragma' => 0,
+                                                                                                                 'is_version' => 0
+                                                                                                               }, 'TAP::DOM::Entry' )
+                                                                                                      ],
+                                                                                       'is_actual_ok' => 0,
+                                                                                       'description' => '- cpu6 c-states',
+                                                                                       'is_ok' => 1,
+                                                                                       'has_todo' => 0,
+                                                                                       'explanation' => '',
+                                                                                       'directive' => '',
+                                                                                       'type' => 'test',
+                                                                                       'is_version' => 0
+                                                                                     }, 'TAP::DOM::Entry' ),
+                                                                              bless( {
+                                                                                       'is_comment' => 0,
+                                                                                       'is_yaml' => 0,
+                                                                                       'is_plan' => 0,
+                                                                                       'number' => '2',
+                                                                                       'is_unknown' => 0,
+                                                                                       'is_bailout' => 0,
+                                                                                       'is_pragma' => 0,
+                                                                                       'is_unplanned' => 0,
+                                                                                       'has_skip' => 0,
+                                                                                       'is_test' => 1,
+                                                                                       '_children' => [
+                                                                                                        bless( {
+                                                                                                                 'is_comment' => 1,
+                                                                                                                 'has_skip' => 0,
+                                                                                                                 'is_test' => 0,
+                                                                                                                 'is_yaml' => 0,
+                                                                                                                 'is_plan' => 0,
+                                                                                                                 'is_actual_ok' => 0,
+                                                                                                                 'is_unknown' => 0,
+                                                                                                                 'has_todo' => 0,
+                                                                                                                 'is_bailout' => 0,
+                                                                                                                 'is_pragma' => 0,
+                                                                                                                 'is_version' => 0
+                                                                                                               }, 'TAP::DOM::Entry' )
+                                                                                                      ],
+                                                                                       'is_actual_ok' => 0,
+                                                                                       'description' => '- cpu7 c-states',
+                                                                                       'is_ok' => 1,
+                                                                                       'has_todo' => 0,
+                                                                                       'explanation' => '',
+                                                                                       'directive' => '',
+                                                                                       'type' => 'test',
+                                                                                       'is_version' => 0
+                                                                                     }, 'TAP::DOM::Entry' ),
+                                                                              bless( {
+                                                                                       'is_comment' => 0,
+                                                                                       'is_yaml' => 0,
+                                                                                       'is_plan' => 0,
+                                                                                       'number' => '3',
+                                                                                       'is_unknown' => 0,
+                                                                                       'is_bailout' => 0,
+                                                                                       'is_pragma' => 0,
+                                                                                       'is_unplanned' => 0,
+                                                                                       'has_skip' => 0,
+                                                                                       'is_test' => 1,
+                                                                                       '_children' => [
+                                                                                                        bless( {
+                                                                                                                 'is_comment' => 1,
+                                                                                                                 'has_skip' => 0,
+                                                                                                                 'is_test' => 0,
+                                                                                                                 'is_yaml' => 0,
+                                                                                                                 'is_plan' => 0,
+                                                                                                                 'is_actual_ok' => 0,
+                                                                                                                 'is_unknown' => 0,
+                                                                                                                 'has_todo' => 0,
+                                                                                                                 'is_bailout' => 0,
+                                                                                                                 'is_pragma' => 0,
+                                                                                                                 'is_version' => 0
+                                                                                                               }, 'TAP::DOM::Entry' )
+                                                                                                      ],
+                                                                                       'is_actual_ok' => 0,
+                                                                                       'description' => '- cpu4 c-states',
+                                                                                       'is_ok' => 1,
+                                                                                       'has_todo' => 0,
+                                                                                       'explanation' => '',
+                                                                                       'directive' => '',
+                                                                                       'type' => 'test',
+                                                                                       'is_version' => 0
+                                                                                     }, 'TAP::DOM::Entry' ),
+                                                                              bless( {
+                                                                                       'is_comment' => 0,
+                                                                                       'is_yaml' => 0,
+                                                                                       'is_plan' => 0,
+                                                                                       'number' => '4',
+                                                                                       'is_unknown' => 0,
+                                                                                       'is_bailout' => 0,
+                                                                                       'is_pragma' => 0,
+                                                                                       'is_unplanned' => 0,
+                                                                                       'has_skip' => 0,
+                                                                                       'is_test' => 1,
+                                                                                       '_children' => [
+                                                                                                        bless( {
+                                                                                                                 'is_comment' => 1,
+                                                                                                                 'has_skip' => 0,
+                                                                                                                 'is_test' => 0,
+                                                                                                                 'is_yaml' => 0,
+                                                                                                                 'is_plan' => 0,
+                                                                                                                 'is_actual_ok' => 0,
+                                                                                                                 'is_unknown' => 0,
+                                                                                                                 'has_todo' => 0,
+                                                                                                                 'is_bailout' => 0,
+                                                                                                                 'is_pragma' => 0,
+                                                                                                                 'is_version' => 0
+                                                                                                               }, 'TAP::DOM::Entry' )
+                                                                                                      ],
+                                                                                       'is_actual_ok' => 0,
+                                                                                       'description' => '- cpu5 c-states',
+                                                                                       'is_ok' => 1,
+                                                                                       'has_todo' => 0,
+                                                                                       'explanation' => '',
+                                                                                       'directive' => '',
+                                                                                       'type' => 'test',
+                                                                                       'is_version' => 0
+                                                                                     }, 'TAP::DOM::Entry' ),
+                                                                              bless( {
+                                                                                       'is_comment' => 0,
+                                                                                       'is_yaml' => 0,
+                                                                                       'is_plan' => 0,
+                                                                                       'number' => '5',
+                                                                                       'is_unknown' => 0,
+                                                                                       'is_bailout' => 0,
+                                                                                       'is_pragma' => 0,
+                                                                                       'is_unplanned' => 0,
+                                                                                       'has_skip' => 0,
+                                                                                       'is_test' => 1,
+                                                                                       '_children' => [
+                                                                                                        bless( {
+                                                                                                                 'is_comment' => 1,
+                                                                                                                 'has_skip' => 0,
+                                                                                                                 'is_test' => 0,
+                                                                                                                 'is_yaml' => 0,
+                                                                                                                 'is_plan' => 0,
+                                                                                                                 'is_actual_ok' => 0,
+                                                                                                                 'is_unknown' => 0,
+                                                                                                                 'has_todo' => 0,
+                                                                                                                 'is_bailout' => 0,
+                                                                                                                 'is_pragma' => 0,
+                                                                                                                 'is_version' => 0
+                                                                                                               }, 'TAP::DOM::Entry' )
+                                                                                                      ],
+                                                                                       'is_actual_ok' => 0,
+                                                                                       'description' => '- cpu2 c-states',
+                                                                                       'is_ok' => 1,
+                                                                                       'has_todo' => 0,
+                                                                                       'explanation' => '',
+                                                                                       'directive' => '',
+                                                                                       'type' => 'test',
+                                                                                       'is_version' => 0
+                                                                                     }, 'TAP::DOM::Entry' ),
+                                                                              bless( {
+                                                                                       'is_comment' => 0,
+                                                                                       'is_yaml' => 0,
+                                                                                       'is_plan' => 0,
+                                                                                       'number' => '6',
+                                                                                       'is_unknown' => 0,
+                                                                                       'is_bailout' => 0,
+                                                                                       'is_pragma' => 0,
+                                                                                       'is_unplanned' => 0,
+                                                                                       'has_skip' => 0,
+                                                                                       'is_test' => 1,
+                                                                                       '_children' => [
+                                                                                                        bless( {
+                                                                                                                 'is_comment' => 1,
+                                                                                                                 'has_skip' => 0,
+                                                                                                                 'is_test' => 0,
+                                                                                                                 'is_yaml' => 0,
+                                                                                                                 'is_plan' => 0,
+                                                                                                                 'is_actual_ok' => 0,
+                                                                                                                 'is_unknown' => 0,
+                                                                                                                 'has_todo' => 0,
+                                                                                                                 'is_bailout' => 0,
+                                                                                                                 'is_pragma' => 0,
+                                                                                                                 'is_version' => 0
+                                                                                                               }, 'TAP::DOM::Entry' )
+                                                                                                      ],
+                                                                                       'is_actual_ok' => 0,
+                                                                                       'description' => '- cpu3 c-states',
+                                                                                       'is_ok' => 1,
+                                                                                       'has_todo' => 0,
+                                                                                       'explanation' => '',
+                                                                                       'directive' => '',
+                                                                                       'type' => 'test',
+                                                                                       'is_version' => 0
+                                                                                     }, 'TAP::DOM::Entry' ),
+                                                                              bless( {
+                                                                                       'is_comment' => 0,
+                                                                                       'is_yaml' => 0,
+                                                                                       'is_plan' => 0,
+                                                                                       'number' => '7',
+                                                                                       'is_unknown' => 0,
+                                                                                       'is_bailout' => 0,
+                                                                                       'is_pragma' => 0,
+                                                                                       'is_unplanned' => 0,
+                                                                                       'has_skip' => 0,
+                                                                                       'is_test' => 1,
+                                                                                       '_children' => [
+                                                                                                        bless( {
+                                                                                                                 'is_comment' => 1,
+                                                                                                                 'has_skip' => 0,
+                                                                                                                 'is_test' => 0,
+                                                                                                                 'is_yaml' => 0,
+                                                                                                                 'is_plan' => 0,
+                                                                                                                 'is_actual_ok' => 0,
+                                                                                                                 'is_unknown' => 0,
+                                                                                                                 'has_todo' => 0,
+                                                                                                                 'is_bailout' => 0,
+                                                                                                                 'is_pragma' => 0,
+                                                                                                                 'is_version' => 0
+                                                                                                               }, 'TAP::DOM::Entry' )
+                                                                                                      ],
+                                                                                       'is_actual_ok' => 0,
+                                                                                       'description' => '- cpu0 c-states',
+                                                                                       'is_ok' => 1,
+                                                                                       'has_todo' => 0,
+                                                                                       'explanation' => '',
+                                                                                       'directive' => '',
+                                                                                       'type' => 'test',
+                                                                                       'is_version' => 0
+                                                                                     }, 'TAP::DOM::Entry' ),
+                                                                              bless( {
+                                                                                       'is_comment' => 0,
+                                                                                       'is_yaml' => 0,
+                                                                                       'is_plan' => 0,
+                                                                                       'number' => '8',
+                                                                                       'is_unknown' => 0,
+                                                                                       'is_bailout' => 0,
+                                                                                       'is_pragma' => 0,
+                                                                                       'is_unplanned' => 0,
+                                                                                       'has_skip' => 0,
+                                                                                       'is_test' => 1,
+                                                                                       '_children' => [
+                                                                                                        bless( {
+                                                                                                                 'is_comment' => 1,
+                                                                                                                 'has_skip' => 0,
+                                                                                                                 'is_test' => 0,
+                                                                                                                 'is_yaml' => 0,
+                                                                                                                 'is_plan' => 0,
+                                                                                                                 'is_actual_ok' => 0,
+                                                                                                                 'is_unknown' => 0,
+                                                                                                                 'has_todo' => 0,
+                                                                                                                 'is_bailout' => 0,
+                                                                                                                 'is_pragma' => 0,
+                                                                                                                 'is_version' => 0
+                                                                                                               }, 'TAP::DOM::Entry' )
+                                                                                                      ],
+                                                                                       'is_actual_ok' => 0,
+                                                                                       'description' => '- cpu1 c-states',
+                                                                                       'is_ok' => 1,
+                                                                                       'has_todo' => 0,
+                                                                                       'explanation' => '',
+                                                                                       'directive' => '',
+                                                                                       'type' => 'test',
+                                                                                       'is_version' => 0
+                                                                                     }, 'TAP::DOM::Entry' )
+                                                                            ],
+                                                                 'is_good_plan' => 1,
+                                                                 'has_problems' => 0,
+                                                                 'end_time' => '1328600495.21316',
+                                                                 'summary' => bless( {
+                                                                                       'parse_errors' => 0,
+                                                                                       'status' => 'PASS',
+                                                                                       'todo_passed' => 0,
+                                                                                       'all_passed' => 1,
+                                                                                       'exit' => 0,
+                                                                                       'has_errors' => 0,
+                                                                                       'passed' => 8,
+                                                                                       'total' => 8,
+                                                                                       'failed' => 0,
+                                                                                       'elapsed_timestr' => ' 0 wallclock secs ( 0.01 usr +  0.00 sys =  0.01 CPU)',
+                                                                                       'elapsed' => bless( [
+                                                                                                             0,
+                                                                                                             '0.01',
+                                                                                                             '0',
+                                                                                                             0,
+                                                                                                             0,
+                                                                                                             0
+                                                                                                           ], 'Benchmark' ),
+                                                                                       'skipped' => 0,
+                                                                                       'has_problems' => 0,
+                                                                                       'wait' => 0,
+                                                                                       'todo' => 0
+                                                                                     }, 'TAP::DOM::Summary' ),
+                                                                 'pragmas' => [],
+                                                                 'tapdom_config' => bless( {
+                                                                                             'ignorelines' => qr/(?-xism:^\#\# )/,
+                                                                                             'usebitsets' => undef,
+                                                                                             'ignore' => {
+                                                                                                           'as_string' => 1,
+                                                                                                           'raw' => 1
+                                                                                                         }
+                                                                                           }, 'TAP::DOM::Config' ),
+                                                                 'plan' => '1..8',
+                                                                 'tests_planned' => 8
+                                                               }, 'TAP::DOM' ),
+                                               'meta' => {
+                                                           'section' => 'offline test'
+                                                         }
+                                             }
+                         }
+          }
+        ];

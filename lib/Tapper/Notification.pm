@@ -154,7 +154,7 @@ different success state as the current one.
 sub testrun_success_change
 {
         my ($search, $lookback) = @_;
-        my $testruns = model('TestrunDB')->resultset('Testrun')->search($search);
+        my $testruns = model('TestrunDB')->resultset('Testrun')->search($search, {order_by => {-desc => 'created_at'}});
         my $success;
         while ($lookback-- and my $this_testrun = $testruns->next) {
                 # the testrun that triggered this check is not part of the backlog since we want

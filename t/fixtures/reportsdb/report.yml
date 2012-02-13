@@ -9,7 +9,7 @@
   name: full_tap_report
   data:
     id: 101
-
+    machine_name: dickstone
 
 - schema: Tap
   name: tap 1
@@ -74,9 +74,8 @@
       user_id: 1 # anton
       persist: ~
       event: report_received
-      condition: deep_search(report('results'), '//todo_passed')
+      condition: testrun_success_change({'topic_name' => 'Software'}, 2)
       comment: Report received
-
 
 - schema: User
   name: user_anton
@@ -102,6 +101,40 @@
         testrun_id: 23
 
 
+- schema: ReportgroupTestrunStats
+  name: stats_testrun_software1
+  data:
+    testrun_id: 4
+    success_ratio: 100.0
+
+- schema: ReportgroupTestrunStats
+  name: stats_testrun_software2
+  data:
+    testrun_id: 100
+    success_ratio: 100.0
+
+- schema: ReportgroupTestrunStats
+  name: stats_testrun_software3
+  data:
+    testrun_id: 112
+    success_ratio: 100.0
+
+
+- schema: ReportgroupTestrunStats
+  name: stats_testrun_104
+  data:
+    testrun_id: 104
+    success_ratio: 100
+
+- schema: ReportgroupTestrunStats
+  name: stats_testrun_23
+  data:
+    testrun_id: 23
+    success_ratio: 5.0
+
+
+
+
 
 
 # -----------------------------------------------
@@ -118,7 +151,7 @@
     tap: |
       # Tapper-suite-version: 0.020022
       # Tapper-starttime-test-program: 20120207T083655
-      # Tapper-machine-name: circe
+      # Tapper-machine-name: dickstone
       # Tapper-suite-name: C-states Check
       # Tapper-reportgroup-arbitrary:
       # Tapper-section: tapper-meta-information

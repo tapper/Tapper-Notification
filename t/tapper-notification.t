@@ -55,5 +55,4 @@ is_deeply(\@results, [[ 'anton@mail.net', 'Report received' ]], 'Expected argume
 
 
 
-
 done_testing;

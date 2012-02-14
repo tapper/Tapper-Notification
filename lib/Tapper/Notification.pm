@@ -290,8 +290,9 @@ sub run
                                 $subscription->comment($errormsg);
                                 $subscription->update;
                                 $self->notify_user($subscription);
+                                $subscription->delete; #always delete broken subscriptions
+
                         }
-                        $subscription->delete unless $subscription->persist;
                 }
                 $event->delete;
         }

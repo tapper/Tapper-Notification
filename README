@@ -1,7 +1,53 @@
-Tapper-Action
-=============
+Tapper-Notification
+===================
 
-Daemon and plugins to handle MCP actions
+Daemon that informs users that an event matching a certain condition has
+occured.
+
+Notifications are requested by putting a notification subscription into
+the database. Such a subscription may look like this:
+
+     event: testrun_finished
+     condition: testrun('id') == 23
+     user_login: anton # optional, defaults to $ENV{USER}
+     comment: "Get back to work, testrun 23 is finished"
+     persist: 0    # boolean
+
+Two events are currently defined:
+* testrun_finished
+* report_received
+
+Conditions are a expressions and may contain the following functions:
+
+=== testrun($element) ===
+returns a hash containing all information about the testrun that
+triggered the testrun* event (empty for non-testrun events) when
+called without parameter. With paramater it returns the $element in this
+hash.
+
+=== report($element) ===
+returns a hash containing all information about the report that
+triggered the report* event(empty for non-report events) when
+called without parameter. With paramater it returns the $element in this
+hash.
+
+=== deep_search($data, $searchstring) ===
+executes a Data::DPath search given as searchstring on $data. Example:
+deep_search(report('results'), '//tests_planned/')
+
+=== testrun_success_change($condition, $lookback) ===
+check whether the last $lookback testruns that match the $condition all
+have the same success state but a different one than the testrun that
+triggered the testrun_finished event. This function can be called on
+other events but don't expect its return value to make much sense then.
+
+=== topic_success_change($lookback) ===
+Checks whether the last $lookback testruns with the same topic_name as
+the current testrun all have a different success value than the testrun that
+triggered the testrun_finished event. This function can be called on
+other events but don't expect its return value to make much sense then.
+
+
 
 
 About Tapper

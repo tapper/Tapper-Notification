@@ -270,9 +270,25 @@ sub run
         while (my $event = $events->next) {
                 my $subscriptions = $self->get_subscriptions($event->type);
                 while (my $subscription = $subscriptions->next) {
-                        if ($self->matches($subscription->condition, $event)) {
+                        try {
+                                if ($self->matches($subscription->condition, $event)) {
 
 
+                                        $self->notify_user($subscription);
+                                        $subscription->delete unless $subscription->persist;
+                                }
+                        } catch {
+                                my $errormsg = "An error occured while trying to match your subscription for event type '";
+                                $errormsg   .= $subscription->event;
+                                $errormsg   .= "'.\n";
+                                $errormsg   .= "Comment was:'";
+                                $errormsg   .= $subscription->comment;
+                                $errormsg   .= "'.\n";
+                                $errormsg   .= "Condition was:\n";
+                                $errormsg   .= $subscription->condition;
+                                $errormsg   .= "\n\nThe following error occured:\n$_";
+                                $subscription->comment($errormsg);
+                                $subscription->update;
                                 $self->notify_user($subscription);
                         }
                         $subscription->delete unless $subscription->persist;

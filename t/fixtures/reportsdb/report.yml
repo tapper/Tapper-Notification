@@ -64,8 +64,8 @@
       user_id: 1 # anton
       persist: 1
       event: testrun_finished
-      condition: testrun('topic_name') eq 'Software'
-      comment: Testrun id 23 finished
+      condition: testrun('id') == 42
+      comment: Testrun id 42 finished
 
 - schema: Notification
   name: subscription
@@ -74,8 +74,19 @@
       user_id: 1 # anton
       persist: ~
       event: report_received
-      condition: testrun_success_change({'topic_name' => 'Software'}, 2)
+      condition: deep_search(report('results'), '//tests_planned/')
       comment: Report received
+
+- schema: Notification
+  name: subscription
+  data:
+      id: 3
+      user_id: 1 # anton
+      persist: 1
+      event: testrun_finished
+      condition: topic_success_change( 2)
+      comment: Report received
+
 
 - schema: User
   name: user_anton
@@ -98,7 +109,7 @@
       id: 1
       type: testrun_finished
       message: |
-        testrun_id: 23
+        testrun_id: 42
 
 
 - schema: ReportgroupTestrunStats

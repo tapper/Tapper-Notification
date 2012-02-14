@@ -23,6 +23,15 @@
 - schema: Testrun
   name: perfmon
   data:
+    id: 42
+    owner_user_id: 12
+    shortname: deep
+    notes: thought
+    topic_name: Misc
+
+- schema: Testrun
+  name: perfmon
+  data:
     id: 23
     owner_user_id: 12
     shortname: perfmon

@@ -40,8 +40,7 @@ my $notify = Tapper::Notification->new();
 isa_ok($notify, 'Tapper::Notification');
 
 $notify->run();
-is_deeply(\@results, [[ 'anton@mail.net', 'Testrun id 23 finished' ]], 'Expected arguments to mail notifier');
-
+is_deeply(\@results, [[ 'anton@mail.net', 'Testrun id 42 finished' ]], 'Expected arguments to mail notifier for test "testrun with given id finished"');
 @results = ();
 my $event = model('ReportsDB')->resultset('NotificationEvent')->new({
                                                                      type => 'report_received',
@@ -51,8 +50,18 @@ my $event = model('ReportsDB')->resultset('NotificationEvent')->new({
 $event->insert();
 
 $notify->run();
-is_deeply(\@results, [[ 'anton@mail.net', 'Report received' ]], 'Expected arguments to mail notifier');
+is_deeply(\@results, [[ 'anton@mail.net', 'Report received' ]], 'Expected arguments to mail notifier for test "report with given id received"');
 
+
+@results = ();
+$event = model('ReportsDB')->resultset('NotificationEvent')->new({
+                                                                     type => 'testrun_finished',
+                                                                     message => { testrun_id =>  23,}
+                                                                    }
+                                                                   );
+$event->insert();
+$notify->run();
+is_deeply(\@results, [[ 'anton@mail.net', 'Report received' ]], 'Expected arguments to mail notifier for test "Success change for last 2 testruns with same topic as current one"');
 
 
 done_testing;

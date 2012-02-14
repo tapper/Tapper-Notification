@@ -210,16 +210,7 @@ sub matches
         $le->func(testrun_success_change  => sub { testrun_success_change @_ });
 
         my $success;
-
-        # # FIXME: testrun_success_change triggers a bug in perl. As soon as this bug is fixed we can switch
-        # # to using Language::Expr for all functions
-        # if ($condition =~ m/^testrun_success_change(.+)/) {
-        #         $success = eval "testrun_success_change($1)";
-        # } else {
-        #         $success = $le->eval($condition);
-        # }
         $success = $le->eval($condition);
-
         return  $success;
 }
 

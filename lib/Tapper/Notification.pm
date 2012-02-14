@@ -174,6 +174,25 @@ sub testrun_success_change
         return 0;
 }
 
+=head2 topic_success_change
+
+Return whether the last given testruns of same topic name have a
+different success state then the current one. This is pretty much a
+testrun_success_change with the topic_name of the current testrun.
+
+@param int    - number of testruns to look back
+
+@return boolean - success change (yes/no)?
+
+=cut
+
+sub topic_success_change
+{
+        my ($lookback) = @_;
+        return testrun_success_change({topic_name => $testrun->{topic_name}}, $lookback);;
+}
+
+
 =head2 matches
 
 Check whether the given notification condition matches on the given
@@ -208,6 +227,7 @@ sub matches
         $le->func(deep_search => sub { return dpath($_[1])->match($_[0]) } );
         $le->func(reportdata  => sub { return reportdata @_ } );
         $le->func(testrun_success_change  => sub { testrun_success_change @_ });
+        $le->func(topic_success_change    => sub { topic_success_change @_ });
 
         my $success;
         $success = $le->eval($condition);

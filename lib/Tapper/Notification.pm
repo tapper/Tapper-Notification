@@ -189,6 +189,7 @@ testrun_success_change with the topic_name of the current testrun.
 sub topic_success_change
 {
         my ($lookback) = @_;
+        return unless ref($testrun) eq 'HASH' and exists $testrun->{topic_name};
         return testrun_success_change({topic_name => $testrun->{topic_name}}, $lookback);;
 }
 

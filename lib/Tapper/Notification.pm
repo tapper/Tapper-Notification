@@ -135,7 +135,7 @@ sub get_testrun_success
 {
         my ($testrun_id) = @_;
         my $stats = model('ReportsDB')->resultset('ReportgroupTestrunStats')->search({testrun_id => $testrun_id});
-        return undef if not $stats->count;
+        return if not $stats->count;
         return ($stats->first->success_ratio == 100) ? 'pass' : 'fail';
 }
 
@@ -263,12 +263,13 @@ sub matches
                 default { return };
         }
 
+        ## no critic ProhibitNestedSubs
         sub testrun { return unless $testrun; return ( @_ ? $testrun->{$_[0]} : $testrun ) }
         sub report { return unless $report; return ( @_ ? $report->{$_[0]}  : $report ) }
         sub deep_search { return dpath($_[1])->match($_[0]) }
 
         my $success;
-        $success = eval($condition);
+        $success = eval($condition); ## no critic
         return  $success;
 }
 

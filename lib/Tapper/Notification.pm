@@ -194,10 +194,54 @@ sub topic_success_change
 }
 
 
+# =head2 matches
+#
+# Check whether the given notification condition matches on the given
+# event, i.e. whether we need to notify the user.
+#
+# @param string - condition
+# @param Result::NotificationEvent - event
+#
+# @return true/false based on condition
+#
+# =cut
+#
+# sub matches
+# {
+#         my ($self, $condition, $event) = @_;
+#         given($event->type){
+#                 when ('testrun_finished') {
+#                         $testrun             = $self->get_testrun_data($event->message->{testrun_id});
+#                 }
+#                 when ('report_received')  {
+#                         $report       = $self->get_report_data($event->message->{report_id});
+#                 };
+#                 default { return };
+#         }
+#
+#         my $le = Language::Expr->new;
+#         $le->interpreted(1);
+#
+#         $le->var('report' => $report, 'testrun' => $testrun);
+#         $le->func(testrun     => sub { return ( @_ ? $testrun->{$_[0]} : $testrun ) if $testrun });
+#         $le->func(report      => sub { return ( @_ ? $report->{$_[0]}  : $report  ) if $report  });
+#         $le->func(deep_search => sub { return dpath($_[1])->match($_[0]) } );
+#         $le->func(reportdata  => sub { return reportdata @_ } );
+#         $le->func(testrun_success_change  => sub { testrun_success_change @_ });
+#         $le->func(topic_success_change    => sub { topic_success_change @_ });
+#
+#         my $success;
+#         $success = $le->eval($condition);
+#         return  $success;
+# }
+#
+
+
 =head2 matches
 
 Check whether the given notification condition matches on the given
-event, i.e. whether we need to notify the user.
+event, i.e. whether we need to notify the user. This version uses eval
+and should be replaced as soon as perl5.14.2 is available.
 
 @param string - condition
 @param Result::NotificationEvent - event
@@ -219,21 +263,17 @@ sub matches
                 default { return };
         }
 
-        my $le = Language::Expr->new;
-        $le->interpreted(1);
-
-        $le->var('report' => $report, 'testrun' => $testrun);
-        $le->func(testrun     => sub { return ( @_ ? $testrun->{$_[0]} : $testrun ) if $testrun });
-        $le->func(report      => sub { return ( @_ ? $report->{$_[0]}  : $report  ) if $report  });
-        $le->func(deep_search => sub { return dpath($_[1])->match($_[0]) } );
-        $le->func(reportdata  => sub { return reportdata @_ } );
-        $le->func(testrun_success_change  => sub { testrun_success_change @_ });
-        $le->func(topic_success_change    => sub { topic_success_change @_ });
+        sub testrun { return unless $testrun; return ( @_ ? $testrun->{$_[0]} : $testrun ) }
+        sub report { return unless $report; return ( @_ ? $report->{$_[0]}  : $report ) }
+        sub deep_search { return dpath($_[1])->match($_[0]) }
 
         my $success;
-        $success = $le->eval($condition);
+        $success = eval($condition);
         return  $success;
 }
+
+
+
 
 =head2 notify_user
 

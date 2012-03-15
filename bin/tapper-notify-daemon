@@ -8,7 +8,7 @@ use warnings;
 use Tapper::Notification::Daemon;
 use App::Daemon 'daemonize';
 $App::Daemon::as_user = "root";
-$App::Daemon::logfile = "/tmp/tapper-notification-daemon.log";
+$App::Daemon::logfile = $ENV{HARNESS_ACTIVE} ? "/tmp/tapper-notification-daemon.log" : '/var/log/tapper-notification-daemon.log';
 $App::Daemon::pidfile = "/tmp/tapper-notification-daemon.pid";
 daemonize();
 my $daemon = Tapper::Notification->new;

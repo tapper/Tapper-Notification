@@ -24,8 +24,8 @@ requires 'Language::Expr';
 requires 'Try::Tiny';
 
 requires 'Email::Sender::Simple';
-requires 'Email::Sender::Transport::SMTP'
-requires 'Email::Simple'
+requires 'Email::Sender::Transport::SMTP';
+requires 'Email::Simple';
 
 
 auto_install;

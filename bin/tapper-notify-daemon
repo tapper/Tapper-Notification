@@ -5,7 +5,7 @@ use warnings;
 
 # TODO: redirect STDERR/STDOUT
 
-use Tapper::Notification::Daemon;
+use Tapper::Notification;
 use App::Daemon 'daemonize';
 $App::Daemon::as_user = "root";
 $App::Daemon::logfile = $ENV{HARNESS_ACTIVE} ? "/tmp/tapper-notification-daemon.log" : '/var/log/tapper-notification-daemon.log';

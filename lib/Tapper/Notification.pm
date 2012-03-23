@@ -292,7 +292,7 @@ sub notify_user
                 $text = "Your notification subscription matched a Tapper event.\n".
                   "The following subscription was triggered:\n\n".
                     "Event type: ".$subscription->event.
-                      "\nCondition: ".$subscription->condition."\n";
+                      "\nFilter: ".$subscription->filter."\n";
         }
 
 
@@ -333,7 +333,7 @@ sub run
                 my $subscriptions = $self->get_subscriptions($event->type);
                 while (my $subscription = $subscriptions->next) {
                         try {
-                                if ($self->matches($subscription->condition, $event)) {
+                                if ($self->matches($subscription->filter, $event)) {
 
 
                                         $self->notify_user($subscription);
@@ -347,7 +347,7 @@ sub run
                                 $errormsg   .= $subscription->comment;
                                 $errormsg   .= "'.\n";
                                 $errormsg   .= "Condition was:\n";
-                                $errormsg   .= $subscription->condition;
+                                $errormsg   .= $subscription->filter;
                                 $errormsg   .= "\n\nThe following error occured:\n$_";
                                 $subscription->comment($errormsg);
                                 $subscription->update;

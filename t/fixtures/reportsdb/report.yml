@@ -64,7 +64,7 @@
       user_id: 1 # anton
       persist: 1
       event: testrun_finished
-      condition: testrun('id') == 42
+      filter: testrun('id') == 42
       comment: Testrun id 42 finished
 
 - schema: Notification
@@ -74,7 +74,7 @@
       user_id: 1 # anton
       persist: ~
       event: report_received
-      condition: deep_search(report('results'), '//tests_planned/')
+      filter: deep_search(report('results'), '//tests_planned/')
       comment: Report received
 
 - schema: Notification
@@ -84,7 +84,7 @@
       user_id: 1 # anton
       persist: 1
       event: testrun_finished
-      condition: topic_success_change( 2)
+      filter: topic_success_change( 2)
       comment: Report received
 
 

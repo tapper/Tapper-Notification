@@ -1,4 +1,5 @@
 package Tapper::Notification;
+# ABSTRACT: Tapper - Daemon and plugins to handle MCP notifications
 
 use 5.010;
 use warnings;
@@ -19,16 +20,12 @@ extends 'Tapper::Base';
 
 has cfg => (is => 'rw', default => sub { Tapper::Config->subconfig} );
 
-our $VERSION = '3.000001';
+
 
 # We have these variables global to have them available in condition
 # match functions in notification subscriptions. If they were not global
 # the functions used in these conditions would need to have them in the API
 our ($testrun, $report);
-
-=head1 NAME
-
-Tapper::Notification - Tapper - Daemon and plugins to handle MCP notifications
 
 =head1 SYNOPSIS
 
@@ -39,7 +36,6 @@ condition they subscribed to has occured.
 
     my $daemon = Tapper::Notification->new();
     $daemon->run();
-
 
 =head1 FUNCTIONS
 
@@ -375,61 +371,5 @@ sub loop
                 sleep $self->cfg->{times}{notification_poll_intervall} || 1;
         }
 }
-
-
-=head1 AUTHOR
-
-AMD OSRC Tapper Team, C<< <tapper at amd64.org> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to C<bug-tapper-notification at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Tapper-Notification>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
-
-
-
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc Tapper::Notification
-
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Tapper-Notification>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/Tapper-Notification>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/Tapper-Notification>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/Tapper-Notification/>
-
-=back
-
-
-=head1 ACKNOWLEDGEMENTS
-
-
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2011 AMD OSRC Tapper Team, all rights reserved.
-
-This program is released under the following license: freebsd
-
-
-=cut
 
 1; # End of Tapper::Notification

@@ -1,4 +1,6 @@
-#! perl
+#! /usr/bin/perl
+# PODNAME: tapper-notify-daemon
+# ABSTRACT: cmdline frontend to Tapper::Notification/daemonize
 
 use strict;
 use warnings;

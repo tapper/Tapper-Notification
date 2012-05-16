@@ -1,6 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - provide function 'topic_success_change' for conditions
+        - provide advanced notification conditions
+        - provide search in reports and with dpath
+        - implemented condition checking in notifications
         - big Dist::Zilla roundhouse kick
 
 2011-06-10  Steffen Schwigon  <steffen.schwigon@amd.com>

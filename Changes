@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.0.1     2012-05-16
         - provide function 'topic_success_change' for conditions
         - provide advanced notification conditions
         - provide search in reports and with dpath

@@ -269,8 +269,11 @@ sub matches
         return  $success;
 }
 
+=head2 testrun
 
+=head2 report
 
+=head2 deep_search
 
 =head2 notify_user
 

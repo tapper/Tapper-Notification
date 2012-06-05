@@ -5,13 +5,14 @@
 use strict;
 use warnings;
 
-# TODO: redirect STDERR/STDOUT
-
+use File::Spec::Functions 'tmpdir';
 use Tapper::Notification;
 use App::Daemon 'daemonize';
+
+my ($tmpfh, $tmpfile) = tempfile("tapper-notification-daemon.log-XXXXX", UNLINK => 1);
 $App::Daemon::as_user = "root";
-$App::Daemon::logfile = $ENV{HARNESS_ACTIVE} ? "/tmp/tapper-notification-daemon.log" : '/var/log/tapper-notification-daemon.log';
-$App::Daemon::pidfile = "/tmp/tapper-notification-daemon.pid";
+$App::Daemon::logfile = $ENV{HARNESS_ACTIVE} ? $tmpfile : '/var/log/tapper-notification-daemon.log';
+$App::Daemon::pidfile = tmpdir()."/tapper-notification-daemon.pid";
 daemonize();
 my $daemon = Tapper::Notification->new;
 $daemon->loop;

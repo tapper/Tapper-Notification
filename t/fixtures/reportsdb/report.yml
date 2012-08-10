@@ -61,7 +61,7 @@
   name: subscription
   data:
       id: 1
-      user_id: 1 # anton
+      owner_id: 1 # anton
       persist: 1
       event: testrun_finished
       filter: testrun('id') == 42
@@ -71,7 +71,7 @@
   name: subscription
   data:
       id: 2
-      user_id: 1 # anton
+      owner_id: 1 # anton
       persist: ~
       event: report_received
       filter: deep_search(report('results'), '//tests_planned/')
@@ -81,15 +81,15 @@
   name: subscription
   data:
       id: 3
-      user_id: 1 # anton
+      owner_id: 1 # anton
       persist: 1
       event: testrun_finished
       filter: topic_success_change( 2)
       comment: Report received
 
 
-- schema: User
-  name: user_anton
+- schema: Owner
+  name: owner_anton
   data:
       id: 1
       name: Anton Gorodezki
@@ -99,7 +99,7 @@
   name: contact_anton
   data:
       id: 1
-      user_id: 1 # anton
+      owner_id: 1 # anton
       address: anton@mail.net
       protocol: mail
 

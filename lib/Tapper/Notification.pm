@@ -90,9 +90,9 @@ sub get_testrun_data
         my ($self, $testrun_id) = @_;
         my $testrun      = model('TestrunDB')->resultset('Testrun')->find({id => $testrun_id},{ result_class => 'DBIx::Class::ResultClass::HashRefInflator' });
         my $job          = model('TestrunDB')->resultset('TestrunScheduling')->find({testrun_id => $testrun_id},{ result_class => 'DBIx::Class::ResultClass::HashRefInflator' });
-        my $user         = model('TestrunDB')->resultset('User')->find($testrun->{owner_user_id});
+        my $owner        = model('TestrunDB')->resultset('Owner')->find($testrun->{owner_id});
         $testrun         = merge($job, $testrun);
-        $testrun->{user} = $user ? $user->login : 'unknown';
+        $testrun->{owner} = $owner ? $owner->login : 'unknown';
         return $testrun;
 }
 
@@ -193,7 +193,7 @@ sub topic_success_change
 # =head2 matches
 #
 # Check whether the given notification condition matches on the given
-# event, i.e. whether we need to notify the user.
+# event, i.e. whether we need to notify the owner.
 #
 # @param string - condition
 # @param Result::NotificationEvent - event
@@ -236,7 +236,7 @@ sub topic_success_change
 =head2 matches
 
 Check whether the given notification condition matches on the given
-event, i.e. whether we need to notify the user. This version uses eval
+event, i.e. whether we need to notify the owner. This version uses eval
 and should be replaced as soon as perl5.14.2 is available.
 
 @param string - condition
@@ -275,15 +275,15 @@ sub matches
 
 =head2 deep_search
 
-=head2 notify_user
+=head2 notify_owner
 
-Send notification to user.
+Send notification to owner.
 
 @param Result::Notification - subscription that triggered the notification
 
 =cut
 
-sub notify_user
+sub notify_owner
 {
         my ($self, $subscription) = @_;
         my $text = $subscription->comment;
@@ -295,7 +295,7 @@ sub notify_user
         }
 
 
-        my $contact      = $subscription->user->contacts->first;
+        my $contact      = $subscription->owner->contacts->first;
         my $plugin       = ucfirst($contact->protocol);
         my $plugin_class = "Tapper::Notification::Plugin::${plugin}";
         eval "use $plugin_class"; ## no critic
@@ -335,7 +335,7 @@ sub run
                                 if ($self->matches($subscription->filter, $event)) {
 
 
-                                        $self->notify_user($subscription);
+                                        $self->notify_owner($subscription);
                                         $subscription->delete unless $subscription->persist;
                                 }
                         } catch {
@@ -350,7 +350,7 @@ sub run
                                 $errormsg   .= "\n\nThe following error occured:\n$_";
                                 $subscription->comment($errormsg);
                                 $subscription->update;
-                                $self->notify_user($subscription);
+                                $self->notify_owner($subscription);
                                 $subscription->delete; #always delete broken subscriptions
 
                         }

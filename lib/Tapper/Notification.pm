@@ -132,7 +132,7 @@ sub get_testrun_success
         my ($testrun_id) = @_;
         my $stats = model('ReportsDB')->resultset('ReportgroupTestrunStats')->search({testrun_id => $testrun_id});
         return if not $stats->count;
-        return ($stats->first->success_ratio == 100) ? 'pass' : 'fail';
+        return ($stats->search({}, {rows => 1})->first->success_ratio == 100) ? 'pass' : 'fail';
 }
 
 =head2 testrun_success_change
@@ -295,7 +295,7 @@ sub notify_owner
         }
 
 
-        my $contact      = $subscription->owner->contacts->first;
+        my $contact      = $subscription->owner->contacts->search({}, {rows => 1})->first;
         my $plugin       = ucfirst($contact->protocol);
         my $plugin_class = "Tapper::Notification::Plugin::${plugin}";
         eval "use $plugin_class"; ## no critic

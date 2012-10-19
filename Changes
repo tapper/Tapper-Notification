@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+4.1.0     2012-10-19
         * PostgreSQL support
         - [FIX] slow first() usage
         - rename USER into OWNER

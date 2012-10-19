@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        * PostgreSQL support
+        - [FIX] slow first() usage
+        - rename USER into OWNER
         - log file handling during test
 
 4.0.2     2012-06-05

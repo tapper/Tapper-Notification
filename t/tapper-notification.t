@@ -64,4 +64,21 @@ $notify->run();
 is_deeply(\@results, [[ 'anton@mail.net', 'Report received' ]], 'Expected arguments to mail notifier for test "Success change for last 2 testruns with same topic as current one"');
 
 
+#################################
+#                               #
+# Test success_word in testrun  #
+#                               #
+#################################
+
+@results = ();
+$event = model('ReportsDB')->resultset('NotificationEvent')->new({
+                                                                     type => 'testrun_finished',
+                                                                     message => { testrun_id =>  13,}
+                                                                 }
+                                                                );
+$event->insert();
+$notify->run();
+is_deeply(\@results, [[ 'anton@mail.net', 'Fail' ]], 'Expected arguments to mail notifier for test "Failed kernel testrun"');
+
+
 done_testing;

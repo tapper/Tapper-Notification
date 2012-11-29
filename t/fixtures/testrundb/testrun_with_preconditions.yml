@@ -27,6 +27,13 @@
     name: Software
     description: any non-kernel software, e.g., libraries, programs
 
+- schema: Topic
+  name: Kernel
+  data:
+    name: Kernel
+    description: Just a topic different from software, which is the default
+
+
 # -------------------- testruns "perfmon", "lmbench"
 
 
@@ -76,7 +83,22 @@
   name: testrun_three_job
   data:
     id: 112
-    testrun_id: 11
+    testrun_id: 12
+    host_id: 5
+
+- schema: Testrun
+  name: testrun_fail2
+  data:
+    id: 13
+    owner_id: 1
+    shortname: testrun_four
+    topic_name: Kernel
+
+- schema: TestrunScheduling
+  name: testrun_four_job
+  data:
+    id: 113
+    testrun_id: 13
     host_id: 5
 
 

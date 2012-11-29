@@ -87,6 +87,16 @@
       filter: topic_success_change( 2)
       comment: Report received
 
+- schema: Notification
+  name: subscription
+  data:
+      id: 4
+      owner_id: 1 # anton
+      persist: 0
+      event: testrun_finished
+      filter: lc(testrun('topic_name')) eq 'kernel' and testrun('success_word') eq 'fail'
+      comment: Fail
+
 
 - schema: Owner
   name: owner_anton
@@ -129,6 +139,12 @@
   name: stats_testrun_software3
   data:
     testrun_id: 12
+    success_ratio: 5.0
+
+- schema: ReportgroupTestrunStats
+  name: stats_testrun_kernel1
+  data:
+    testrun_id: 13
     success_ratio: 5.0
 
 

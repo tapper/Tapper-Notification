@@ -64,8 +64,8 @@
       owner_id: 1 # anton
       persist: 1
       event: testrun_finished
-      filter: testrun('id') == 42
-      comment: Testrun id 42 finished
+      filter: testrun('id') == 10
+      comment: Testrun id 10 finished
 
 - schema: Notification
   name: subscription
@@ -109,38 +109,26 @@
       id: 1
       type: testrun_finished
       message: |
-        testrun_id: 42
+        testrun_id: 10
 
 
 - schema: ReportgroupTestrunStats
   name: stats_testrun_software1
   data:
-    testrun_id: 4
+    testrun_id: 10
     success_ratio: 100.0
 
 - schema: ReportgroupTestrunStats
   name: stats_testrun_software2
   data:
-    testrun_id: 100
+    testrun_id: 11
     success_ratio: 100.0
+
 
 - schema: ReportgroupTestrunStats
   name: stats_testrun_software3
   data:
-    testrun_id: 112
-    success_ratio: 100.0
-
-
-- schema: ReportgroupTestrunStats
-  name: stats_testrun_104
-  data:
-    testrun_id: 104
-    success_ratio: 100
-
-- schema: ReportgroupTestrunStats
-  name: stats_testrun_23
-  data:
-    testrun_id: 23
+    testrun_id: 12
     success_ratio: 5.0
 
 

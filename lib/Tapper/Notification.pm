@@ -272,6 +272,7 @@ sub matches
         sub deep_search { return dpath($_[1])->match($_[0]) }
 
         my $success;
+        no warnings 'uninitialized';
         $success = eval($condition); ## no critic
         return  $success;
 }

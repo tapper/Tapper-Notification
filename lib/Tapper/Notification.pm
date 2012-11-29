@@ -91,7 +91,14 @@ sub get_testrun_data
         my $testrun      = model('TestrunDB')->resultset('Testrun')->find({id => $testrun_id},{ result_class => 'DBIx::Class::ResultClass::HashRefInflator' });
         my $job          = model('TestrunDB')->resultset('TestrunScheduling')->find({testrun_id => $testrun_id},{ result_class => 'DBIx::Class::ResultClass::HashRefInflator' });
         my $owner        = model('TestrunDB')->resultset('Owner')->find($testrun->{owner_id});
-        $testrun         = merge($job, $testrun);
+
+        my $success      = model('ReportsDB')->resultset('ReportgroupTestrunStats')->find($testrun_id, { result_class => 'DBIx::Class::ResultClass::HashRefInflator' }) // {};
+
+        if (%$success) {
+                $success->{success_word} = $success->{success_ratio} == 100 ? 'pass' : 'fail';
+        }
+
+        $testrun         = merge($success, $job, $testrun);  # keep $success left to make sure it can't overwrite $job and $testrun
         $testrun->{owner} = $owner ? $owner->login : 'unknown';
         return $testrun;
 }
@@ -132,7 +139,7 @@ sub get_testrun_success
         my ($testrun_id) = @_;
         my $stats = model('ReportsDB')->resultset('ReportgroupTestrunStats')->search({testrun_id => $testrun_id});
         return if not $stats->count;
-        return ($stats->search({}, {rows => 1})->first->success_ratio == 100) ? 'pass' : 'fail';
+        return (($stats->search({}, {rows => 1})->first->success_ratio == 100) ? 'pass' : 'fail');
 }
 
 =head2 testrun_success_change

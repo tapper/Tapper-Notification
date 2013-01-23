@@ -5,15 +5,18 @@
 use strict;
 use warnings;
 
-use File::Spec::Functions 'tmpdir';
-use Tapper::Notification;
-use App::Daemon 'daemonize';
+use Tapper::Notification::Daemon;
 
-my ($tmpfh, $tmpfile) = tempfile("tapper-notification-daemon.log-XXXXX", UNLINK => 1);
-$App::Daemon::as_user = "root";
-$App::Daemon::logfile = $ENV{HARNESS_ACTIVE} ? $tmpfile : '/var/log/tapper-notification-daemon.log';
-$App::Daemon::pidfile = tmpdir()."/tapper-notification-daemon.pid";
-daemonize();
-my $daemon = Tapper::Notification->new;
-$daemon->loop;
+$ENV{MX_DAEMON_STDOUT} ||= '/var/log/tapper_notification_daemon_stdout.log';
+$ENV{MX_DAEMON_STDERR} ||= '/var/log/tapper_notification_daemon_stderr.log';
+
+$ENV{MX_DAEMON_STDOUT} = '/tmp/tapper_notification_daemon_stdout.log' if not -w $ENV{MX_DAEMON_STDOUT};
+$ENV{MX_DAEMON_STDERR} = '/tmp/tapper_notification_daemon_stderr.log' if not -w $ENV{MX_DAEMON_STDERR};
+
+
+my $notify = Tapper::Notification::Daemon->new
+    (
+     pidfile => '/tmp/tapper-reports-api-daemon.pid'
+    );
+$notify->run;
 

@@ -40,7 +40,7 @@ my $notify = Tapper::Notification->new();
 isa_ok($notify, 'Tapper::Notification');
 
 $notify->run();
-note(@results);
+
 is_deeply(\@results, [[ 'anton@mail.net', 'Testrun id 10 finished' ]], 'Expected arguments to mail notifier for test "testrun with given id finished"');
 @results = ();
 my $event = model('TestrunDB')->resultset('NotificationEvent')->new({

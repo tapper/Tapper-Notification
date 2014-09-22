@@ -52,7 +52,7 @@ sub get_events
         my ($self) = @_;
 
         my $events;
-        $events = model('ReportsDB')->resultset('NotificationEvent')->search();
+        $events = model('TestrunDB')->resultset('NotificationEvent')->search();
 
         return $events;
 }
@@ -63,14 +63,14 @@ Get all subscriptions for a given event type.
 
 @param string - type of the event
 
-@return Tapper::Schema::ReportsDB::ResultSet::Notification
+@return Tapper::Schema::TestrunDB::ResultSet::Notification
 
 =cut
 
 sub get_subscriptions
 {
         my ($self, $type) = @_;
-        my $subscriptions = model('ReportsDB')->resultset('Notification')->search({event => $type});
+        my $subscriptions = model('TestrunDB')->resultset('Notification')->search({event => $type});
         return $subscriptions;
 }
 
@@ -92,7 +92,7 @@ sub get_testrun_data
         my $job          = model('TestrunDB')->resultset('TestrunScheduling')->find({testrun_id => $testrun_id},{ result_class => 'DBIx::Class::ResultClass::HashRefInflator' });
         my $owner        = model('TestrunDB')->resultset('Owner')->find($testrun->{owner_id});
 
-        my $success      = model('ReportsDB')->resultset('ReportgroupTestrunStats')->find($testrun_id, { result_class => 'DBIx::Class::ResultClass::HashRefInflator' }) // {};
+        my $success      = model('TestrunDB')->resultset('ReportgroupTestrunStats')->find($testrun_id, { result_class => 'DBIx::Class::ResultClass::HashRefInflator' }) // {};
 
         if (%$success) {
                 $success->{success_word} = $success->{success_ratio} == 100 ? 'pass' : 'fail';
@@ -116,7 +116,7 @@ Get all neccessary report data related to given report id.
 sub get_report_data
 {
         my ($self, $report_id) = @_;
-        my $report = model('ReportsDB')->resultset('Report')->find($report_id);
+        my $report = model('TestrunDB')->resultset('Report')->find($report_id);
         my $report_hash = Tapper::Reports::DPath::_as_data($report);
         return $report_hash;
 }
@@ -137,7 +137,7 @@ given testrun has no reports and thus no testrun stats can be found.
 sub get_testrun_success
 {
         my ($testrun_id) = @_;
-        my $stats = model('ReportsDB')->resultset('ReportgroupTestrunStats')->search({testrun_id => $testrun_id});
+        my $stats = model('TestrunDB')->resultset('ReportgroupTestrunStats')->search({testrun_id => $testrun_id});
         return if not $stats->count;
         return (($stats->search({}, {rows => 1})->first->success_ratio == 100) ? 'pass' : 'fail');
 }

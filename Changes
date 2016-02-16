@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - use MooseX::Daemonize for daemon
+        - merge TestrunDB/ReportsDB
 
 4.1.1     2012-11-20
         - dzil pluginbundle TAPPER

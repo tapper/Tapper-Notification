@@ -169,7 +169,7 @@ sub testrun_success_change
 
                 $success = $this_success if not defined($success);
                 # last $lookback tests did not have the same success state
-                return 0 if not $this_success ~~ $success;
+                return 0 if not $this_success =~ /$success/;
         }
         my $testrun_success = get_testrun_success($testrun->{id});
 
@@ -256,15 +256,13 @@ and should be replaced as soon as perl5.14.2 is available.
 sub matches
 {
         my ($self, $condition, $event) = @_;
-        given($event->type){
-                when ('testrun_finished') {
+        if ($event->type eq 'testrun_finished') {
                         $testrun             = $self->get_testrun_data($event->message->{testrun_id});
                 }
-                when ('report_received')  {
+        elsif ($event->type eq 'report_received')  {
                         $report       = $self->get_report_data($event->message->{report_id});
-                };
-                default { return };
-        }
+                }
+        else { return }
 
         ## no critic ProhibitNestedSubs
         sub testrun { return unless $testrun; return ( @_ ? $testrun->{$_[0]} : $testrun ) }

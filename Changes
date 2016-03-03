@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+        - DEPRECATION: Tapper::Notification is OBSOLETE
         - use MooseX::Daemonize for daemon
         - merge TestrunDB/ReportsDB
 
